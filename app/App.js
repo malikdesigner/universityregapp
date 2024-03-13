@@ -26,14 +26,10 @@ export default function App() {
         <Stack.Screen options={{
           headerShown: false,
         }} name="FormData" component={FormData} />
-        <Stack.Screen options={{
-          headerShown: false,
-        }} name="AllUserData" component={AllUserData} />
+        <Stack.Screen  name="AllUserData" component={AllUserData} />
         <Stack.Screen options={{
           headerShown: false,
         }} name="TeacherRegistration" component={TeacherRegistration} />
-
-
       </Stack.Navigator>
     </NavigationContainer>
   );
