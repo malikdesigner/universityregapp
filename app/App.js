@@ -8,6 +8,7 @@ import Login from './components/LoginPage';
 import FormData from './components/FormData';
 import AllUserData from './components/AllUserData';
 import TeacherRegistration from './components/TeacherRegistration';
+import AddSubject from './components/AddSubject';
 // import AddGame from './component/AddGame';
 
 export default function App() {
@@ -30,6 +31,9 @@ export default function App() {
         <Stack.Screen options={{
           headerShown: false,
         }} name="TeacherRegistration" component={TeacherRegistration} />
+          <Stack.Screen options={{
+          headerShown: false,
+        }} name="AddSubject" component={AddSubject} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -21,22 +21,22 @@ const SignUpPage = ({ route: routeProp }) => {
     console.log(routeProp.params.user)
     const [step, setStep] = useState(1);
 
-        const { correspondence_in_welsh, date_added, dob, email, full_name, id, marketing_updates, password, phone_code, phone_number, selectedArea } = routeProp.params.user || {};
-    
-    const [fullName, setFullName] = useState(full_name || ''); 
-    const [emails, setEmail] = useState(email || ''); 
-    const [phoneNumber, setPhoneNumber] = useState(phone_number || ''); 
-    const [phoneCode, setPhoneCode] = useState(phone_code || '') 
-    const [passwords, setPassword] = useState(password || ''); 
+    const { correspondence_in_welsh, date_added, dob, email, full_name, id, marketing_updates, password, phone_code, phone_number, selectedArea } = routeProp.params.user || {};
+
+    const [fullName, setFullName] = useState(full_name || '');
+    const [emails, setEmail] = useState(email || '');
+    const [phoneNumber, setPhoneNumber] = useState(phone_number || '');
+    const [phoneCode, setPhoneCode] = useState(phone_code || '')
+    const [passwords, setPassword] = useState(password || '');
     const [dofb, setDOB] = useState(dob || '');
-    const [isChecked, setIsChecked] = useState(false); 
+    const [isChecked, setIsChecked] = useState(false);
     const [selectedAreas, setArea] = useState(selectedArea || '');
     const [marketingUpdates, setMarketingUpdates] = useState(marketing_updates === 1);
     const [correspondenceInWelsh, setCorrespondenceInWelsh] = useState(correspondence_in_welsh === 1);
     const [longitute, setLogitute] = useState(null);
     const [latitude, setLatitute] = useState(null);
     const [userLocation, setUserLocation] = useState(null);
-
+    const [subjectData, setSubjectData] = useState([]);
     //let userLocation = '';
     const showToast = (message) => {
         ToastAndroid.showWithGravityAndOffset(
@@ -50,11 +50,11 @@ const SignUpPage = ({ route: routeProp }) => {
         );
     };
     const getReverseGeocoding = async (latitude, longitude) => {
-        let urlLInk="https://geocode.maps.co/join/"; //get a new api key from here
+        let urlLInk = "https://geocode.maps.co/join/"; //get a new api key from here
 
         try {
             const response = await fetch(`https://geocode.maps.co/reverse?lat=${latitude}&lon=${longitude}&api_key=65f1799bd9e19304693331bxo16e469`);
-          
+
             const data = await response.json();
 
             // Log the response to understand its structure
@@ -62,7 +62,7 @@ const SignUpPage = ({ route: routeProp }) => {
 
             if (data && data.display_name) {
                 // Extract the formatted address from the response
-                const address = data.address.residential + ','+ data.address.city+', '+ data.address.country;
+                const address = data.address.residential + ',' + data.address.city + ', ' + data.address.country;
                 return address;
             } else {
                 console.error('Geocoding request failed:', data);
@@ -87,9 +87,28 @@ const SignUpPage = ({ route: routeProp }) => {
         setUserLocation(address)
         console.log('Current location:', address);
     };
+    const getAllSubjects = async () => {
+        try {
+            const response = await axios.get(`${apiUrl}/getAllSubjects`);
+            console.log("SUBJECT DATA")
+            console.log(response.data.subData)
+            if (response.data.ok) {
+
+                setSubjectData(response.data.subData);
+                console.log(response.data.subData)
+                //  setUserData(updatedUserData);
+
+            } else {
+                console.error('Error fetching user data:', response.data.message);
+            }
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
+    };
     useEffect(() => {
-    getLocationAsync();
-}, []); // Run once on component mount
+        getLocationAsync();
+        getAllSubjects();
+    }, []); // Run once on component mount
 
     const handleSubmit = async () => {
         console.log(isChecked);
@@ -447,21 +466,15 @@ const SignUpPage = ({ route: routeProp }) => {
                 <View style={styles.form}>
                     <Text style={[styles.stepsHeading, { marginTop: 30, marginBottom: 10 }]}>Area of interest</Text>
                     <Picker
-
                         selectedValue={selectedAreas}
                         style={styles.dropdown}
-                        onValueChange={(itemValue, itemIndex) =>
-                            setArea(itemValue)
-                        }>
+                        onValueChange={(itemValue, itemIndex) => setArea(itemValue)}
+                    >
                         <Picker.Item label="Select Area of Interest" value="" />
-                        <Picker.Item label="Education" value="education" />
-                        <Picker.Item label="Science" value="science" />
-                        <Picker.Item label="Media " value="media" />
-                        <Picker.Item label="Business" value="business" />
-                        <Picker.Item label="Psychology" value="psychology" />
-                        <Picker.Item label="Computer Science" value="computerscience" />
-                        {/* Add more cources  here as you like */}
-
+                        {/* Map over subjectData to generate Picker.Item components */}
+                        {subjectData.map(subject => (
+                            <Picker.Item key={subject.id} label={subject.subjects} value={subject.subjects} />
+                        ))}
                     </Picker>
                     <TouchableOpacity style={styles.backButton} onPress={handleBack}>
                         <Icon name="arrow-left" style={styles.arrowIcon} size={20} color="white" />
@@ -473,6 +486,7 @@ const SignUpPage = ({ route: routeProp }) => {
                     </TouchableOpacity>
                 </View>
             )}
+
             {
                 step === 8 && (
                     <View style={styles.form}>
@@ -520,7 +534,7 @@ const SignUpPage = ({ route: routeProp }) => {
                         onPress={() => setIsChecked(!isChecked)} // Replace setChecked with your state update function
                         containerStyle={{ backgroundColor: 'transparent', borderWidth: 0, marginTop: 20 }}
                     />
-                 
+
                     <TouchableOpacity style={styles.backButton} onPress={handleBack}>
                         <Icon name="arrow-left" style={styles.arrowIcon} size={20} color="white" />
                         <Text style={styles.buttonText}>Back</Text>

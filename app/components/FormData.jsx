@@ -22,7 +22,6 @@ const FormData = ({ navigation, route: routeProp }) => {
 
     // Convert user data object to an array of key-value pairs
     const userDataArray = Object.entries(usersData).map(([key, value]) => ({ label: key, value }));
-console.log(userDataArray)
     const handleEdit = () => {
         navigation.navigate('SignUp', { user: routeProp.params.user });
     };

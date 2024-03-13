@@ -99,6 +99,30 @@ app.post('/addStaffData', async (req, res) => {
         res.status(500).json({ ok: false, message: 'Internal Server Error' });
     }
 });
+
+app.post('/addSubject', async (req, res) => {
+    try {
+        console.log("REQUEST");
+        console.log(req.body);
+
+        const {
+            subject
+        } = req.body;
+
+        const currentDate = new Date().toISOString(); // Get current date in ISO format
+        const sql = `INSERT INTO tbl_subjects (subjects, date_added) 
+                    VALUES (?, ?)`;
+
+        const result = await query(sql, [subject,currentDate]);
+
+        console.log('Record inserted successfully');
+        res.status(200).json({ ok: true, message: 'Record inserted successfully' });
+    } catch (error) {
+        console.error('Error inserting record:', error);
+        res.status(500).json({ ok: false, message: 'Internal Server Error' });
+    }
+});
+
 app.post('/updateUserData', async (req, res) => {
     try {
         console.log("REQUEST");
@@ -156,7 +180,25 @@ app.get('/getUserData', async (req, res) => {
         res.status(500).json({ ok: false, message: 'Internal Server Error' });
     }
 });
+app.get('/getAllSubjects', async (req, res) => {
+    try {
+        // Query to fetch game data along with comments and user details
+        const userQuery = `SELECT * FROM tbl_subjects `;
 
+        const subData = await query(userQuery);
+
+        if (subData.length === 0) {
+            return res.status(404).json({ ok: false, message: 'No User Found' });
+        }
+
+        // Group comments by game ID
+       
+        res.status(200).json({ ok: true, subData: subData });
+    } catch (error) {
+        console.error('Error fetching User data:', error);
+        res.status(500).json({ ok: false, message: 'Internal Server Error' });
+    }
+});
 
 app.post('/login', (req, res) => {
     const { email, password } = req.body;

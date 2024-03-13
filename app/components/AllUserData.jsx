@@ -31,6 +31,9 @@ const AllUserData = ({ navigation }) => {
     const handleRegisterNow = () => {
         navigation.navigate('TeacherRegistration');
     };
+    const handleSubject = () => {
+        navigation.navigate('AddSubject');
+    };
     const handleSignout = () => {
         navigation.navigate('Login');
     };
@@ -121,12 +124,13 @@ const AllUserData = ({ navigation }) => {
                             </View>
                             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                                 <Text style={[styles.link, { marginRight: 15, color: 'white' }]} onPress={handleRegisterNow}>Register Staff</Text>
+                                <Text style={[styles.link, { marginRight: 15, color: 'white' }]} onPress={handleSubject}>Add Subject</Text>
 
                                 <Text style={styles.link} onPress={handleSignout}>Signout</Text>
                             </View>
                         </View>
 
-                        <View style={{flex:1, marginBottom: 10, paddingBottom: 10 }}>
+                        <View style={{ flex: 1, marginBottom: 10, paddingBottom: 10 }}>
                             <FlatList
                                 style={styles.flatList}
                                 data={userData}
@@ -148,21 +152,21 @@ const AllUserData = ({ navigation }) => {
                                                 {item.selectedArea.charAt(0).toUpperCase() + item.selectedArea.slice(1)}
                                             </Text>
                                         </View>
-                                       
-                                                <View style={styles.itemContainer}>
-                                                    <Text style={styles.label}>Phone Number:</Text>
-                                                    <Text style={styles.value}>{item.phone_code} {item.phone_number}</Text>
-                                                    <Text style={[styles.label, { marginLeft: 10 }]}>Email:</Text>
-                                                    <Text style={styles.value}>{item.email}</Text>
-                                                </View>
-                                                <View style={styles.itemContainer}>
-                                                    <Text style={styles.label}>Marketing Updates:</Text>
-                                                    <Text style={styles.value}>{item.marketing_updates === 1 ? "Yes" : "No"}</Text>
-                                                    <Text style={[styles.label, { marginLeft: 10 }]}>Correspondence In Welsh:</Text>
-                                                    <Text style={styles.value}>{item.correspondence_in_welsh === 1 ? "Yes" : "No"}</Text>
-                                                </View>
-                                        
-                                    
+
+                                        <View style={styles.itemContainer}>
+                                            <Text style={styles.label}>Phone Number:</Text>
+                                            <Text style={styles.value}>{item.phone_code} {item.phone_number}</Text>
+                                            <Text style={[styles.label, { marginLeft: 10 }]}>Email:</Text>
+                                            <Text style={styles.value}>{item.email}</Text>
+                                        </View>
+                                        <View style={styles.itemContainer}>
+                                            <Text style={styles.label}>Marketing Updates:</Text>
+                                            <Text style={styles.value}>{item.marketing_updates === 1 ? "Yes" : "No"}</Text>
+                                            <Text style={[styles.label, { marginLeft: 10 }]}>Correspondence In Welsh:</Text>
+                                            <Text style={styles.value}>{item.correspondence_in_welsh === 1 ? "Yes" : "No"}</Text>
+                                        </View>
+
+
                                         <View style={styles.itemContainer}>
                                             <Text style={styles.label}>Form Filled from:</Text>
                                             <Text style={styles.value}>{item.userlocation}</Text>
@@ -196,7 +200,7 @@ const styles = StyleSheet.create({
         minHeight: '100vh',
         maxHeight: 'calc(100vh - 250px)', // Adjust as needed
         marginBottom: 10,
-        overflowY:'auto'
+        overflowY: 'auto'
     },
     itemContainer: {
         flexDirection: 'row',
